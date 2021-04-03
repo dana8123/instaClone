@@ -1,0 +1,25 @@
+{
+  "name": "instaclone",
+  "version": "1.0.0",
+  "description": "(4/2 ~ ) - 강태진, 김연재 - node.js - backend repository 입니다. - 추후 frontend repository에서 배포한 내용과 합쳐서 결과물을 만들 예정입니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danaisboss/instaClone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danaisboss/instaClone/issues"
+  },
+  "homepage": "https://github.com/danaisboss/instaClone#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.3"
+  }
+}
