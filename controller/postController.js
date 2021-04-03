@@ -19,5 +19,11 @@ const postUpload = async (req, res) => {
   };
 };
 
+//upload rendering
+const getUpload = async (req, res) => {
+  res.send('front end 파일명이 뭐지?');
+};
 
-module.exports = { postUpload };
+
+
+module.exports = { postUpload, getUpload };
