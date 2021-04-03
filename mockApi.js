@@ -12,7 +12,7 @@ COMMENT = {
 },
 
 //상세페이지
-FEED = {
+POST = {
   "file": 'https://image.shutterstock.com/image-photo/source-code-html-on-screen-600w-1654738408.jpg',
   "createAt" : '2020.04.01',
   "author": '김연재', //TOKEN 검증 후 해당하는 유저 이름을 뽑아오는 방식이 되겠죠..
@@ -25,13 +25,13 @@ FEED = {
 },
 
 //글쓰기
-WRITE = {
+UPLOAD = {
   "file": 'https://image.shutterstock.com/image-photo/source-code-html-on-screen-600w-1654738408.jpg',
   "content": '이 집 맛집입니다!',
 },
 
 //수정하기
-EDITWRITE = {
+EDIT = {
   "content": '이 집 맛집입니다!',
 }
 
