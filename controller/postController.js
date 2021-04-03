@@ -1,3 +1,4 @@
+const { findByIdAndDelete } = require("../model/post.js");
 const Post = require("../model/post.js");
 
 // 글쓰기 
@@ -42,6 +43,42 @@ const detail = async (req, res) => {
   };
 };
 
+// 수정하기
+const postEdit = async (req, res) => {
+  const {
+    params: {id},
+    body: { content }
+  } = req;
+  try{
+    if( user === post.author ) {
+      await Post.findByIdAndUpdate(id, { content });
+    } else{
+      console.log( '유저 정보가 불일치하여 수정할 수 없습니다.')
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      error : '수정하기에서 오류가 발생했습니다.'
+    });
+  };
+};
+
+//삭제하기
+const deletePost = async (req, res) => {
+  const {
+    params: {id}
+  } = req;
+  
+  try{
+    await findByIdAndDelete(id);
+    res.redirect('/home');
+  } catch(error){
+    console.log(error);
+    res.status(400).send({
+      error : '삭제하기 중 오류가 발생했습니다.'
+    });
+  };
+};
 
 
-module.exports = { postUpload, getUpload, detail };
+module.exports = { postUpload, getUpload, detail, postEdit, deletePost };
