@@ -112,6 +112,7 @@ router.post("/friend_list", async (req, res) => {
     // await User.deleteOne({ nickname: nickname })
 
     friend_Id = await User.find({})
+
     res.json({ friend_list: friend_Id, name });
 });
 
@@ -140,18 +141,16 @@ router.post("/add_friend", async (req, res, next) => {
 router.post("/delete_friend", async (req, res, next) => {
     console.log('== 친구 삭제 발동! ==')
 
-    const friend_nickname = req.body.nickname;
+    const friend_name = req.body.name;
     const { token } = req.headers;
 
     payload = jwt.verify(token, "team2-key");
     let { friend_list } = await User.findOne({ _id: payload.userId });
-    const { nickname } = await User.findOne({ _id: payload.userId });
+    const { name } = await User.findOne({ _id: payload.userId });
 
     // 배열 삭제
-    console.log(friend_nickname)
-    friend_list.splice(friend_list.indexOf(friend_nickname), 1);
-    console.log(friend_list)
-    await User.updateOne({ nickname: nickname }, { $set: { friend_list } });
+    friend_list.splice(friend_list.indexOf(friend_name), 1);
+    await User.updateOne({ name: name }, { $set: { friend_list } });
 });
 
 // 내 친구 목록 보여주기

@@ -150,13 +150,13 @@
         }
 
         // 친구 삭제
-        function delete_friend(nickname) {
+        function delete_friend(name) {
             $.ajax({
                 type: "POST",
                 url: "/api/delete_friend",
                 headers: { token: localStorage.getItem('token') },
                 data: {
-                    "nickname": nickname,
+                    "name": name,
                 },
                 success: function (response) {
                 },
@@ -164,6 +164,8 @@
             alert("삭제 완료!")
             window.location.href = "/home";
         }
+
+
 
         // 게시글 작성
         function write_board() {
