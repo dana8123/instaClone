@@ -3,11 +3,12 @@ const Post = require("../model/post.js");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
+const multer = require('multer')
+const upload = multer({ dest: 'public' })
 
-// 글쓰기 method:post, url:/upload
+// 글쓰기 post("/upload")
 const postUpload = async (req, res) => {
 
-  console.log("===== 글쓰기 db 저장 =====")
   const { token } = req.headers;
   comments = []
 
@@ -15,6 +16,15 @@ const postUpload = async (req, res) => {
   payload = jwt.verify(token, "team2-key");
   const { name } = await User.findOne({ _id: payload.userId })
   //
+
+  // 파일 이름 저장하기
+
+  let file_names = []
+
+  for (value of req.files) {
+    console.log()
+    file_names.push("http://localhost:3000/" + value.filename)
+  }
 
   // 게시글 고유값
   let post_Id = 0
@@ -31,11 +41,12 @@ const postUpload = async (req, res) => {
     const newPost = await Post.create({
       post_Id,
       content,
-      file,
       name,
       comments,
+      file_name: file_names,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm")
     })
+
     res.send("게시글 저장 완료^^ㅋ");
 
   } catch (error) {

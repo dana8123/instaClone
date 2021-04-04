@@ -5,9 +5,8 @@ const connect = require('./model');
 const app = express();
 const cors = require("cors");
 
-const cors = require('cors');
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*',
   credentials: true,
 };
 
@@ -20,7 +19,7 @@ connect();
 //
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
-app.use('/public', express.static('public'));
+app.use(express.static('public'));
 
 // 태진 파일 연결은 모두 /api로
 const instaRouter = require("./routes/instaRoutes");
@@ -47,7 +46,6 @@ app.get('/home', (req, res) => {
 app.get('/detail', (req, res) => {
   res.render('detail')
 })
-//
 
 app.listen(3000, () => {
   console.log(`서버가 연결되었습니다.`);

@@ -162,33 +162,6 @@ router.get("/my_friend_list_show", async (req, res) => {
     console.log(" == 친구목록 확인 완료 ^^ ==")
 });
 
-// 게시글 저장하기
-// router.post("/write", async (req, res, next) => {
-//     console.log("발동중")
-//     const board_show = req.body.board;
-//     const { token } = req.headers;
-
-//     payload = jwt.verify(token, "team2-key");
-//     const { nickname } = await User.findOne({ _id: payload.userId })
-
-//     let like_user = []
-//     let like_count = 0
-
-//     let board_Id = 0
-//     let data = await Board.find({}).sort("-board_Id")
-
-//     if (data.length == 0) { post_Id = 1 }
-//     else { post_Id = data[0]["post _Id"] + 1 }
-
-//     await Board.create({
-//         board_Id,
-//         board_show,
-//         nickname,
-//         like_user,
-//         like_count,
-//     })
-// });
-
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
     console.log("==== /api/show ====")
@@ -199,26 +172,8 @@ router.post("/show", async (req, res) => {
     payload = jwt.verify(token, "team2-key");
 
     const post_list = await Post.find({});
-    // const post_Id = post_list["post_Id"]
-    // const content = post_list["content"]
-    // const image = post_list["file"]
-    // const createAt = post_list["createAt"]
 
-    // console.log(post_Id["post_Id"])
-
-
-    // delete post_list[comments];
-    // delete post_list[_id];
     console.log(post_list)
-    // 친구들 게시글만 보이게 하기
-    // let friend_feed = []
-    // for (let i = 0; i < board_list.length; i++) {
-    //     if (friend_list.includes(board_list[i]["nickname"]) == true) {
-    //         friend_feed.push(board_list[i])
-    //     }
-    // }
-    // res.json({ show_board: friend_feed, nickname: nickname, board_Id_check: board_list });
-
     res.json({
         post_list: post_list,
     })
