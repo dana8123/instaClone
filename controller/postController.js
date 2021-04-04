@@ -2,17 +2,13 @@ const { findByIdAndDelete } = require("../model/post.js");
 const Post = require("../model/post.js");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
-const moment = require("jsonwebtoken");
+const moment = require("moment");
 
 // 글쓰기 method:post, url:/upload
 const postUpload = async (req, res) => {
 
   console.log("===== 글쓰기 db 저장 =====")
   const { token } = req.headers;
-  const token1 = req.headers.token
-  console.log(token)
-  console.log(token1)
-
   comments = []
 
   // 글쓴이 이름 파악하기
@@ -20,15 +16,20 @@ const postUpload = async (req, res) => {
   const { name } = await User.findOne({ _id: payload.userId })
   //
 
+  // 게시글 고유값
+  let post_Id = 0
+  let data = await Post.find({}).sort("-post_Id")
+
+  if (data.length == 0) { post_Id = 1 }
+  else { post_Id = data[0]["post_Id"] + 1 }
+
   const {
     body: { file, content }
   } = req;
-  console.log("==== 이부분이 파일입니다! ====")
-  console.log(req.body)
-  console.log(file)
-  console.log(content)
+
   try {
     const newPost = await Post.create({
+      post_Id,
       content,
       file,
       name,

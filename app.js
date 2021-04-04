@@ -4,11 +4,19 @@ const mongoose = require("mongoose");
 const connect = require('./model');
 const app = express();
 const cors = require("cors");
+
+const cors = require('cors');
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 connect();
 
-
 // cors 특정해야하는 부분 해결
-app.use(cors({ origin: "*" }));
+// app.use(cors({ origin: "*" }));
+
 //
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
