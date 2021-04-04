@@ -7,9 +7,9 @@ mongoose.connection.on("error", err => {
 
 const UserSchema = new mongoose.Schema({
     insta_Id: String,
-    name_person: String,
-    nickname: String,
+    name: String,
     password: String,
+    friend_list: Array,
 });
 
 UserSchema.virtual("userId").get(function () {
