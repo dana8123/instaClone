@@ -18,6 +18,12 @@ const postSchema = new Schema({
   content: {
     type: String,
   },
+  like_user: {
+    type: Array,
+  },
+  like_count: {
+    type: Number,
+  },
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

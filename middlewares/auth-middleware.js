@@ -12,8 +12,7 @@ module.exports = (req, res, next) => {
             errorMessage: "로그인 후 이용 가능한 기능입니다.",
         });
         return;
-    }
-    try {
+    } try {
         const { userId } = jwt.verify(authToken, "my-key");
         User.findById(userId).then((user) => {
             res.locals.user = user;

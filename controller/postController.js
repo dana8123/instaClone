@@ -20,16 +20,19 @@ const postUpload = async (req, res) => {
   // 파일 이름 저장하기
 
   let file_names = []
-
   for (value of req.files) {
     console.log()
-    file_names.push("http://localhost:3000/" + value.filename)
+    file_names.push("http://13.209.10.75/" + value.filename)
   }
+
+  // 좋아요 기초 db넣기
+  let like_count = 0;
+  let like_user = [];
+
 
   // 게시글 고유값
   let post_Id = 0
   let data = await Post.find({}).sort("-post_Id")
-
   if (data.length == 0) { post_Id = 1 }
   else { post_Id = data[0]["post_Id"] + 1 }
 
@@ -44,6 +47,8 @@ const postUpload = async (req, res) => {
       name,
       comments,
       file_name: file_names,
+      like_user: like_user,
+      like_count: like_count,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm")
     })
 
