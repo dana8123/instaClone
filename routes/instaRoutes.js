@@ -112,7 +112,7 @@ router.post("/friend_list", async (req, res) => {
     // await User.deleteOne({ nickname: nickname })
 
     friend_Id = await User.find({})
-    res.json({ friend_list: friend_Id });
+    res.json({ friend_list: friend_Id, name });
 });
 
 // 친구 추가하기
