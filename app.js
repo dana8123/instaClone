@@ -42,5 +42,5 @@ app.get('/detail', (req, res) => {
 //
 
 app.listen(3000, () => {
-  console.log(`서버가 연결되었습니다. http://localhost:3000`);
+  console.log(`서버가 연결되었습니다.`);
 });

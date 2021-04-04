@@ -1,12 +1,10 @@
 const express = require("express");
 const User = require("../model/user");
-const Board = require("../model/board");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/auth-middleware");
 const bcrypt = require("bcrypt");
 const fs = require('fs');
 const { response } = require('express');
-const board = require('../schemas/board');
 const cors = require("cors");
 const app = express();
 const router = express.Router();
@@ -105,7 +103,6 @@ router.post("/friend_list", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
     const { nickname } = await User.findOne({ _id: payload.userId })
-
 
     // let my_nick = []
     // friend_my_Id_save = await User.findOne({ nickname: nickname });

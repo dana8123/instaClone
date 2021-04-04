@@ -1,18 +1,42 @@
 const { findByIdAndDelete } = require("../model/post.js");
 const Post = require("../model/post.js");
+const User = require("../model/user");
+const jwt = require("jsonwebtoken");
+const moment = require("jsonwebtoken");
 
-// 글쓰기 
+// 글쓰기 method:post, url:/upload
 const postUpload = async (req, res) => {
+
+  console.log("===== 글쓰기 db 저장 =====")
+  const { token } = req.headers;
+  const token1 = req.headers.token
+  console.log(token)
+  console.log(token1)
+
+  comments = []
+
+  // 글쓴이 이름 파악하기
+  payload = jwt.verify(token, "team2-key");
+  const { name } = await User.findOne({ _id: payload.userId })
+  //
 
   const {
     body: { file, content }
   } = req;
+  console.log("==== 이부분이 파일입니다! ====")
+  console.log(req.body)
+  console.log(file)
+  console.log(content)
   try {
     const newPost = await Post.create({
       content,
       file,
+      name,
+      comments,
+      createAt: moment().format("YYYY년 MM월 DD일 HH:mm")
     })
-    res.redirect(`detail/:${newPost.id}`);
+    res.send("게시글 저장 완료^^ㅋ");
+
   } catch (error) {
     res.status(400).send({
       error: '업로드하는 중 오류가 발생했습니다.'
