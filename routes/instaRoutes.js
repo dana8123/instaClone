@@ -176,19 +176,14 @@ router.get("/my_friend_list_show", async (req, res) => {
 //     console.log("발동중")
 //     const board_show = req.body.board;
 //     const { token } = req.headers;
-
 //     payload = jwt.verify(token, "team2-key");
 //     const { nickname } = await User.findOne({ _id: payload.userId })
-
 //     let like_user = []
 //     let like_count = 0
-
 //     let board_Id = 0
 //     let data = await Board.find({}).sort("-board_Id")
-
 //     if (data.length == 0) { post_Id = 1 }
 //     else { post_Id = data[0]["post _Id"] + 1 }
-
 //     await Board.create({
 //         board_Id,
 //         board_show,
@@ -200,7 +195,6 @@ router.get("/my_friend_list_show", async (req, res) => {
 
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
-
     console.log("==== /api/show ====")
     const { token } = req.headers;
     const post_list = await Post.find({});
@@ -212,11 +206,9 @@ router.post("/show", async (req, res) => {
     const { insta_Id } = await User.findOne({ _id: payload.userId })
 
     const existUsers = await User.findOne({ insta_Id: insta_Id });
-
     // 접속한 사람의 친구목록을 받아온 후
     // for문을 돌려서 post의 name이 포함되어있는지 확인 후
     // 있는 것만 배열에 넣고 전송하기
-
     res.send({
         post_list: post_list
     })
@@ -228,9 +220,7 @@ router.post("/show_board_detail/:instaId", async (req, res) => {
     console.log(instaId)
     const board_list = await Board.findOne({ board_Id: instaId });
     console.log(board_list)
-
     res.json({ board_list: board_list });
-
 });
 
 // 좋아요
@@ -254,6 +244,7 @@ router.post("/like", async (req, res) => {
 
         like_user.splice(like_user.indexOf(name), 1);
         await Post.updateOne({ post_Id }, { $set: { like_user, like_count } });
+        console.log(post_list)
         res.send({ post_list: post_list })
         return
     }
@@ -261,6 +252,7 @@ router.post("/like", async (req, res) => {
         like_count = like_count += 1
         like_user.push(name)
         await Post.updateOne({ post_Id }, { $set: { like_user, like_count } });
+        console.log(post_list)
         res.send({ post_list: post_list })
     }
 });
