@@ -10,7 +10,6 @@ const upload = multer({ dest: 'public' })
 const postUpload = async (req, res) => {
 
   const { token } = req.headers;
-  comments = []
 
   // 글쓴이 이름 파악하기
   payload = jwt.verify(token, "team2-key");
