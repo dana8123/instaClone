@@ -9,12 +9,14 @@ const upload = multer({ dest: 'public' })
 // 글쓰기 post("/upload")
 const postUpload = async (req, res) => {
 
-  const { token } = req.headers;
+  // const { token } = req.headers;
 
-  // 글쓴이 이름 파악하기
-  payload = jwt.verify(token, "team2-key");
-  const { name } = await User.findOne({ _id: payload.userId })
-  //
+  // // 글쓴이 이름 파악하기
+  // payload = jwt.verify(token, "team2-key");
+  // const { name } = await User.findOne({ _id: payload.userId })
+  // //
+  const { insta_Id } = res.locals.user;
+  const { name } = await User.findOne({insta_Id});
 
   // 파일 이름 저장하기
 
@@ -36,7 +38,7 @@ const postUpload = async (req, res) => {
   else { post_Id = data[0]["post_Id"] + 1 }
 
   const {
-    body: { file, content }
+    body: { content }
   } = req;
 
   try {
@@ -44,14 +46,17 @@ const postUpload = async (req, res) => {
       post_Id,
       content,
       name,
-      comments,
       file_name: file_names,
       like_user: like_user,
       like_count: like_count,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm")
     })
 
-    res.send("게시글 저장 완료^^ㅋ");
+    res.send({
+      message: '게시물 저장 완료',
+      postId: `${newPost.id}`,
+      comment: `${newPost.comments}`
+    });
 
   } catch (error) {
     res.status(400).send({

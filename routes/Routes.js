@@ -12,7 +12,7 @@ const upload = multer({ dest: 'public' })
 const postRouter = express.Router();
 const commentRouter = express.Router();
 
-postRouter.post('/upload', upload.array('file'), postUpload);
+postRouter.post('/upload', authMiddleware ,upload.array('file'), postUpload);
 postRouter.post('/detail/:id', detail);
 postRouter.put('/detail/:id/edit', postEdit);
 postRouter.delete('/detail/:id/delete', deletePost);

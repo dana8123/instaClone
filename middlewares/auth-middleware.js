@@ -4,23 +4,22 @@ const User = require("../model/user");
 // 이거 3번째에 모듈로 안 넣어줘도 적용되는거 물어보기
 // (req, res, authmiddlewares) 이렇게 안 해도 되는 듯
 module.exports = (req, res, next) => {
-    const { authorization } = req.headers;
-    const [authType, authToken] = (authorization || "").split(" ");
+    const { token } = req.headers;
 
-    if (!authToken || authType !== "Bearer") {
+    if (!token) {
         res.status(401).send({
             errorMessage: "로그인 후 이용 가능한 기능입니다.",
         });
         return;
     } try {
-        const { userId } = jwt.verify(authToken, "my-key");
+        const { userId } = jwt.verify(token, "team2-key");
         User.findById(userId).then((user) => {
             res.locals.user = user;
             next();
         });
     } catch (err) {
         res.status(401).send({
-            errorMessage: "로그인 후 이용 가능한 기능입니다.",
+            errorMessage: "22로그인 후 이용 가능한 기능입니다.",
         });
     }
 };
