@@ -28,7 +28,7 @@ const commentUpload = async (req, res) => {
     });
     post.save();
     post.comments.push(newComment.id);
-    res.redirect(`/detail/${post.id}`);
+    res.send({ newComment });
 
   } catch (error) {
 
