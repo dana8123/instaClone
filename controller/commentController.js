@@ -77,3 +77,6 @@ const commentDelete = async (req, res) => {
 
   }
 }
+
+
+module.exports = { commentDelete, commentEdit, commentUpload };
