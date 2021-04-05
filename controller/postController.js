@@ -62,12 +62,6 @@ const postUpload = async (req, res) => {
   };
 };
 
-//upload rendering
-//TODO : send -> render로 변경하여 응답할 것
-const getUpload = async (req, res) => {
-  res.send('front end 파일명이 뭐지?');
-};
-
 //상세페이지 불러오기
 const detail = async (req, res) => {
   const {
@@ -123,4 +117,4 @@ const deletePost = async (req, res) => {
 };
 
 
-module.exports = { postUpload, getUpload, detail, postEdit, deletePost };
+module.exports = { postUpload, detail, postEdit, deletePost };
