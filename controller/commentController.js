@@ -49,12 +49,15 @@ const commentEdit = async (req, res) => {
   try {
 
     await Comment.findByIdAndUpdate(id, { text });
+    res.send({
+      message: '댓글 수정 완료!'
+    })
 
   } catch (error) {
 
     res.send({
       error: '댓글 수정 중 오류가 발생했습니다.'
-    })
+    });
     console.log(error);
 
   }
@@ -68,6 +71,9 @@ const commentDelete = async (req, res) => {
   try {
 
     await Comment.findByIdAndDelete(id);
+    res.send({
+      message: '댓글 삭제 완료!'
+    });
 
   } catch (error) {
 

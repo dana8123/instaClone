@@ -88,13 +88,18 @@ const postEdit = async (req, res) => {
   try {
     if (user === post.author) {
       await Post.findByIdAndUpdate(id, { content });
+      res.send({
+        message: '수정완료!'
+      })
     } else {
-      console.log('유저 정보가 불일치하여 수정할 수 없습니다.')
+      res.send({
+        error: '작성자만 수정할 수 있습니다.'
+      })
     }
   } catch (error) {
-    console.log(error);
-    res.status(400).send({
-      error: '수정하기에서 오류가 발생했습니다.'
+      console.log(error);
+      res.status(400).send({
+        error: '수정하기에서 오류가 발생했습니다.'
     });
   };
 };
