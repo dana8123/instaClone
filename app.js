@@ -1,5 +1,5 @@
 const express = require("express");
-const { postRouter, commentRouter } = require("./routes/Routes");
+const { postRouter } = require("./routes/Routes");
 const mongoose = require("mongoose");
 const connect = require('./model');
 const app = express();
@@ -27,7 +27,6 @@ app.use("/api", [instaRouter]);
 
 //Router middlewares
 app.use(postRouter);
-app.use(commentRouter);
 //connect();
 
 
