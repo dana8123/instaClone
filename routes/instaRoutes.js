@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const fs = require('fs');
 const { response } = require('express');
 const cors = require("cors");
+const moment = require("moment");
 const app = express();
 const router = express.Router();
 
@@ -49,15 +50,38 @@ router.post("/register", async (req, res) => {
 
 // 로그인 jwt
 router.post("/login", async (req, res) => {
-    console.log("여기가 리퀘바디 =============")
-    console.log(req.body)
     console.log("로그인 시작")
     try {
         const { insta_Id, password } = req.body;
         const user = await User.findOne({ insta_Id }).exec();
-        bcrypt.compare(password, user["password"], (err, same) => { // 비밀번호 일치 확인
+
+        bcrypt.compare(password, user["password"], (err, same) => {
+
+            let date = new Date()
+
+            // // 년월일시간 형식중에 하나
+            // consol.log(date.toUTCString())
+            // // 이게 초단위로 바꾸는 거임 현재 시간을
+            // console.log(date.getTime())
+            // // 이거 만료 시간 앞에 2가 2시간임. 10으로하면 10시간
+            // date.setTime(date.getTime() + 2 * 60 * 60 * 1000),
+
+
+            // payload 이거가 암호화하기
+
+            payload = {
+                "iss": "taejin",
+                "sub": "insta",
+                "aud": user.userId,
+                "exp": date.setTime(date.getTime() + 2 * 60 * 60 * 1000),
+                "iat": date.getTime(),
+                "userId": user.userId
+            }
+
+            // =========== //
+
             if (same) {
-                const token = jwt.sign({ userId: user.userId }, "team2-key");
+                const token = jwt.sign(payload, "team2-key");
                 res.send({
                     token,
                 });
@@ -67,7 +91,9 @@ router.post("/login", async (req, res) => {
                 });
                 return;
             }
+
         })
+
     } catch (err) {
         res.status(400).send({
             errorMessage: "이메일 또는 패스워드의 형식이 올바르지 않습니다."
@@ -77,9 +103,7 @@ router.post("/login", async (req, res) => {
 
 // jwt로그인 실험용
 router.post("/test", async (req, res) => {
-
     const token = req.body.token;
-
     payload = jwt.verify(token, "team2-key");
     const { name } = await User.findOne({ _id: payload.userId })
     const { insta_Id } = await User.findOne({ _id: payload.userId })
@@ -95,7 +119,6 @@ router.post("/test", async (req, res) => {
         name: name,
         insta_Id: insta_Id,
     })
-
     console.log("==== 끝 =====")
 });
 
@@ -159,8 +182,10 @@ router.post("/delete_friend", async (req, res, next) => {
     await User.updateOne({ name: name }, { $set: { friend_list } });
 });
 
-// 내 친구 목록 보여주기
+// 내 친구 목록 보여주기 // 404오류
 router.get("/my_friend_list_show", async (req, res) => {
+
+    console.log(" == 친구목록 확인 완료 ^^ ==")
 
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
@@ -168,7 +193,6 @@ router.get("/my_friend_list_show", async (req, res) => {
     const { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
     res.json({ my_friend_list_show: friend_list });
-    console.log(" == 친구목록 확인 완료 ^^ ==")
 });
 
 // // 게시글 저장하기
@@ -192,6 +216,8 @@ router.get("/my_friend_list_show", async (req, res) => {
 //         like_count,
 //     })
 // });
+
+
 
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
