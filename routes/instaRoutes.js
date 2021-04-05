@@ -227,11 +227,7 @@ router.post("/show_board_detail/:instaId", async (req, res) => {
 router.post("/like", async (req, res) => {
     const { post_Id } = req.body;
     const { token } = req.headers;
-    const post_list = await Post.find({});
-
-    console.log("=== 좋아요 시작 ===")
-    console.log(token)
-    console.log(req.body.post_Id)
+    let post_list = await Post.find({});
 
     payload = jwt.verify(token, "team2-key");
     const { name } = await User.findOne({ _id: payload.userId });
@@ -239,22 +235,27 @@ router.post("/like", async (req, res) => {
     let { like_user } = await Post.findOne({ post_Id: post_Id })
     let { like_count } = await Post.findOne({ post_Id: post_Id })
 
+    console.log("=== 좋아요 시작 ===")
+    console.log(like_user)
+    console.log(name)
+
     if (like_user.includes(name) == true) {
         like_count = like_count -= 1
-
         like_user.splice(like_user.indexOf(name), 1);
         await Post.updateOne({ post_Id }, { $set: { like_user, like_count } });
-        console.log(post_list)
-        res.send({ post_list: post_list })
-        return
+        console.log("좋아요 취소야 !!")
     }
-    if (like_user.includes(name) == false) {
+    else if (like_user.includes(name) == false) {
         like_count = like_count += 1
         like_user.push(name)
         await Post.updateOne({ post_Id }, { $set: { like_user, like_count } });
-        console.log(post_list)
-        res.send({ post_list: post_list })
+        console.log("좋아요 성공 !!")
     }
+
+    let post_list2 = await Post.find({});
+
+    console.log(post_list2)
+    res.send({ post_list: post_list2 })
 });
 
 module.exports = router;
