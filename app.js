@@ -1,5 +1,5 @@
 const express = require("express");
-const { postRouter } = require("./routes/Routes");
+const { postRouter, commentRouter } = require("./routes/Routes");
 const mongoose = require("mongoose");
 const connect = require('./model');
 const app = express();
