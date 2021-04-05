@@ -52,11 +52,7 @@ const postUpload = async (req, res) => {
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm")
     })
 
-    res.send({
-      message: '게시물 저장 완료',
-      postId: `${newPost.id}`,
-      comment: `${newPost.comments}`
-    });
+    res.send({ newPost });
 
   } catch (error) {
     res.status(400).send({
@@ -74,7 +70,7 @@ const detail = async (req, res) => {
   //TODO: detail 페이지 랜더링 파일 수정해야함. 임의로 넣어놓은값임
   try {
     const post = await Post.findById(id).populate('comments');
-    res.render(`detail`, { post });
+    res.send({ post });
   } catch (error) {
     console.log(error);
     res.status(400).send({
@@ -111,7 +107,9 @@ const deletePost = async (req, res) => {
 
   try {
     await findByIdAndDelete(id);
-    res.redirect('/home');
+    res.send({
+      message: '삭제완료!'
+    });
   } catch (error) {
     console.log(error);
     res.status(400).send({
