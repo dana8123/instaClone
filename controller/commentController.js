@@ -10,8 +10,8 @@ const moment = require("moment");
 //댓글 작성하기
 const commentUpload = async (req, res) => {
 
-  const { userId } = res.locals.user;
-  const { name } = await User.findOne({ userId });
+  const { insta_Id } = res.locals.user;
+  const { name } = await User.findOne({insta_Id});
   const {
     params: { id },
     body: { text }
@@ -21,7 +21,7 @@ const commentUpload = async (req, res) => {
   try {
 
     const newComment = await Comment.create({
-      text,
+      text: text,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
       name,
     });
