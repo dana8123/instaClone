@@ -27,6 +27,7 @@ app.use("/api", [instaRouter]);
 
 //Router middlewares
 app.use(postRouter);
+app.use(commentRouter);
 //connect();
 
 
