@@ -4,14 +4,16 @@ const Comment = require("../model/comment");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 
+
 //댓글 조회하기는.. 구현하지 않겠습니다. 
 //왜냐하면 댓글을 작성하면서 post에 푸시해주거든요..!
+
 
 //댓글 작성하기
 const commentUpload = async (req, res) => {
 
   const { insta_Id } = res.locals.user;
-  const { name } = await User.findOne({insta_Id});
+  const { name } = await User.findOne({ insta_Id });
   const {
     params: { id },
     body: { text }
@@ -19,7 +21,6 @@ const commentUpload = async (req, res) => {
   const post = await Post.findById(id);
 
   try {
-
     const newComment = await Comment.create({
       text: text,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
