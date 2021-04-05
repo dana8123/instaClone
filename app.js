@@ -1,5 +1,5 @@
 const express = require("express");
-const { postRouter } = require("./routes/Routes");
+const { postRouter, commentRouter } = require("./routes/Routes");
 const mongoose = require("mongoose");
 const connect = require('./model');
 const app = express();
@@ -27,7 +27,7 @@ app.use("/api", [instaRouter]);
 
 //Router middlewares
 app.use(postRouter);
-//connect();
+app.use(commentRouter);
 
 
 // 임시 프론트 // 로그인 후 글쓰기는 ARC로 해결 안되는 듯
