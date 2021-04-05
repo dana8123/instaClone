@@ -16,11 +16,11 @@ app.use(cors({ origin: "*" }));
 router.post("/register", async (req, res) => {
     try {
         const { insta_Id, name, password } = req.body;
-
         const existUsers = await User.findOne({ insta_Id: insta_Id });
+        const existUsers2 = await User.findOne({ name: name });
         console.log(existUsers)
 
-        if (existUsers !== null) {
+        if (existUsers !== null || existUsers2 !== null) {
             res.status(400).send({
                 errorMessage: "이미 가입된 아이디 또는 닉네임이 있습니다.",
             });
@@ -101,18 +101,14 @@ router.post("/test", async (req, res) => {
 
 // 친구 추천 보여주기
 router.post("/friend_list", async (req, res) => {
-
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
     const { name } = await User.findOne({ _id: payload.userId })
-
     // let my_nick = []
     // friend_my_Id_save = await User.findOne({ nickname: nickname });
     // my_nick.push(friend_my_Id_save)
     // await User.deleteOne({ nickname: nickname })
-
-    friend_Id = await User.find({})
-
+    friend_Id = await User.find({});
     res.json({ friend_list: friend_Id, name });
 });
 
@@ -122,20 +118,30 @@ router.post("/add_friend", async (req, res, next) => {
     const add_friend_name = req.body.name;
     console.log(add_friend_name)
     const { token } = req.headers;
-
     payload = jwt.verify(token, "team2-key");
     let { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
-
     if (friend_list.includes(add_friend_name) == true) {
         res.send("이미 친구랍니다^^")
         return
     }
     friend_list.push(add_friend_name)
-
     await User.updateOne({ name }, { $set: { friend_list } });
     res.send("친구 추가 완료 ^^")
 });
+
+// 체크하기
+router.post("/check", async (req, res) => {
+    const { token } = req.headers;
+    payload = jwt.verify(token, "team2-key");
+    const { name } = await User.findOne({ _id: payload.userId })
+    const { insta_Id } = await User.findOne({ _id: payload.userId })
+
+    res.json({
+        name: name,
+        insta_Id: insta_Id,
+    })
+})
 
 // 친구 삭제하기
 router.post("/delete_friend", async (req, res, next) => {
@@ -155,8 +161,10 @@ router.post("/delete_friend", async (req, res, next) => {
 
 // 내 친구 목록 보여주기
 router.get("/my_friend_list_show", async (req, res) => {
+
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
+
     const { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
     res.json({ my_friend_list_show: friend_list });
