@@ -8,31 +8,31 @@ const moment = require("moment");
 //왜냐하면 댓글을 작성하면서 post에 푸시해주거든요..!
 
 //댓글 작성하기
-const commentUpload = async(req,res) => {
+const commentUpload = async (req, res) => {
 
   const { userId } = res.locals.user;
   const { name } = await User.findOne({ userId });
   const {
-    params: {id},
+    params: { id },
     body: { text }
   } = req;
   const post = await Post.findById(id);
 
-  try{
+  try {
 
     const newComment = await Comment.create({
       text,
-      createAt : moment().format("YYYY년 MM월 DD일 HH:mm"),
+      createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
       name,
     });
     post.save();
     post.comments.push(newComment.id);
-    res.redirect(`/detail/${post.id}`); 
+    res.redirect(`/detail/${post.id}`);
 
   } catch (error) {
 
     res.status(400).send({
-      error : '댓글 작성 중 오류가 발생했습니다.'
+      error: '댓글 작성 중 오류가 발생했습니다.'
     });
     console.log(error);
 
@@ -40,16 +40,16 @@ const commentUpload = async(req,res) => {
 };
 
 //댓글 수정하기
-const commentEdit = async(req,res) => {
+const commentEdit = async (req, res) => {
   const {
-    params: {id},
+    params: { id },
     body: { text }
   } = req;
-  try{
+  try {
 
     await Comment.findByIdAndUpdate(id, { text });
 
-  } catch(error) {
+  } catch (error) {
 
     res.send({
       error: '댓글 수정 중 오류가 발생했습니다.'
@@ -60,14 +60,14 @@ const commentEdit = async(req,res) => {
 }
 
 //삭제하기
-const commentDelete = async(req,res) => {
-  const{
-    params: {id}
+const commentDelete = async (req, res) => {
+  const {
+    params: { id }
   } = req;
-  try{
+  try {
 
     await Comment.findByIdAndDelete(id);
-    
+
   } catch (error) {
 
     res.send({
