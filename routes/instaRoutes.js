@@ -207,6 +207,7 @@ router.post("/show", async (req, res) => {
 
     payload = jwt.verify(token, "team2-key");
     const { friend_list } = await User.findOne({ _id: payload.userId })
+
     const { name } = await User.findOne({ _id: payload.userId })
     const { insta_Id } = await User.findOne({ _id: payload.userId })
 
@@ -217,7 +218,7 @@ router.post("/show", async (req, res) => {
     // 있는 것만 배열에 넣고 전송하기
 
     res.send({
-        post_list: post_list, name: name
+        post_list: post_list
     })
 });
 
@@ -236,6 +237,11 @@ router.post("/show_board_detail/:instaId", async (req, res) => {
 router.post("/like", async (req, res) => {
     const { post_Id } = req.body;
     const { token } = req.headers;
+    const post_list = await Post.find({});
+
+    console.log("=== 좋아요 시작 ===")
+    console.log(token)
+    console.log(req.body.post_Id)
 
     payload = jwt.verify(token, "team2-key");
     const { name } = await User.findOne({ _id: payload.userId });
@@ -248,14 +254,14 @@ router.post("/like", async (req, res) => {
 
         like_user.splice(like_user.indexOf(name), 1);
         await Post.updateOne({ post_Id }, { $set: { like_user, like_count } });
-        res.send("이미 좋아요했으니 취소!")
+        res.send({ post_list: post_list })
         return
     }
     if (like_user.includes(name) == false) {
         like_count = like_count += 1
         like_user.push(name)
         await Post.updateOne({ post_Id }, { $set: { like_user, like_count } });
-        res.send("좋아요 성공~")
+        res.send({ post_list: post_list })
     }
 });
 
