@@ -10,7 +10,6 @@ const cors = require("cors");
 const moment = require("moment");
 const multer = require('multer')
 const upload = multer({ dest: 'public' });
-
 const app = express();
 const router = express.Router();
 
@@ -208,18 +207,39 @@ router.post("/delete_friend", async (req, res, next) => {
     res.send("친구 삭제 완료!")
 });
 
-// 내 친구 목록 보여주기 // 404오류
+
+
+// 내 친구 목록 보여주기 //
 router.get("/my_friend_list_show", async (req, res) => {
 
     console.log(" == 친구목록 확인 완료 ^^ ==")
-
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
 
-    const { friend_list } = await User.findOne({ _id: payload.userId })
-    const { name } = await User.findOne({ _id: payload.userId })
-    res.json({ my_friend_list_show: friend_list });
+    const { friend_list } = await User.findOne({ _id: payload.userId });
+    const { name } = await User.findOne({ _id: payload.userId });
+
+
+
+    my_friend_list = []
+
+    for (let i = 0; i < friend_list.length; i++) {
+        let { profile_img } = await User.findOne({ name: friend_list[i] })
+
+        my_friend_list.push({
+            name: friend_list[i],
+            profile_img: profile_img
+        })
+    }
+
+    res.json({ my_friend_list_show: my_friend_list });
+
+
+
+
+
 });
+
 
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
@@ -266,6 +286,7 @@ router.post("/show_friend_feed", async (req, res) => {
     })
 
 });
+
 
 // 상세 게시글 보여주기
 router.post("/show_board_detail/:instaId", async (req, res) => {
@@ -329,9 +350,7 @@ router.post("/profile_img_save", upload.single('file'), async (req, res, next) =
         profile_img = "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/436/8142f53e51d2ec31bc0fa4bec241a919_crop.jpeg"
     }
 
-
     await User.updateOne({ name: name }, { $set: { profile_img } });
-
     res.send(
         {
             insta_Id: insta_Id,
