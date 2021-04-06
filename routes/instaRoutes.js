@@ -15,6 +15,10 @@ const router = express.Router();
 
 app.use(cors({ origin: "*" }));
 
+
+// 게시글 수정, 댓글 수정
+
+
 //회원가입
 router.post("/register", async (req, res) => {
     try {
@@ -158,12 +162,16 @@ router.post("/friend_list", async (req, res) => {
 // 친구 추가하기
 router.post("/add_friend", async (req, res, next) => {
     console.log('== 친구 추가 발동! ==')
+
     const add_friend_name = req.body.name;
+
     console.log(add_friend_name)
+
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
     let { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
+    let { profile_img } = await User.findOne({ name: add_friend_name })
 
     if (friend_list.includes(add_friend_name) == true) {
         res.send("이미 친구랍니다^^")
@@ -171,10 +179,16 @@ router.post("/add_friend", async (req, res, next) => {
     }
     friend_list.push(add_friend_name)
     await User.updateOne({ name }, { $set: { friend_list } });
-    res.send("친구 추가 완료 ^^")
+
+    new_friend = {
+        name: add_friend_name,
+        profile_img: profile_img,
+    }
+
+    res.send({ new_friend })
 });
 
-// 체크하기 // 체크v, 로그인할 때v, 피드나열할 때v 프로필 이미지, 게시물 저장할 때, 코멘트도 따로
+// 체크하기 //
 router.post("/check", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
@@ -193,21 +207,31 @@ router.post("/check", async (req, res) => {
 router.post("/delete_friend", async (req, res, next) => {
     console.log('== 친구 삭제 발동! ==')
 
-    const friend_name = req.body.name;
+    const delete_friend_name = req.body.name;
+    console.log(delete_friend_name)
+
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
+
     let { friend_list } = await User.findOne({ _id: payload.userId });
     const { name } = await User.findOne({ _id: payload.userId });
+    let { profile_img } = await User.findOne({ name: delete_friend_name })
 
+    console.log(friend_list)
 
     // 배열 삭제
-    friend_list.splice(friend_list.indexOf(friend_name), 1);
+    friend_list.splice(friend_list.indexOf(delete_friend_name), 1);
     await User.updateOne({ name: name }, { $set: { friend_list } });
 
-    res.send("친구 삭제 완료!")
+    console.log(friend_list)
+
+    delete_friend = {
+        name: delete_friend_name,
+        profile_img: profile_img,
+    }
+
+    res.send({ delete_friend })
 });
-
-
 
 // 내 친구 목록 보여주기 //
 router.get("/my_friend_list_show", async (req, res) => {
@@ -239,7 +263,6 @@ router.get("/my_friend_list_show", async (req, res) => {
 
 
 });
-
 
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
@@ -286,7 +309,6 @@ router.post("/show_friend_feed", async (req, res) => {
     })
 
 });
-
 
 // 상세 게시글 보여주기
 router.post("/show_board_detail/:instaId", async (req, res) => {
@@ -358,6 +380,7 @@ router.post("/profile_img_save", upload.single('file'), async (req, res, next) =
             profile_img: profile_img,
         }
     )
+
 });
 
 module.exports = router;
