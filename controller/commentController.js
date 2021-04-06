@@ -5,9 +5,19 @@ const jwt = require("jsonwebtoken");
 const moment = require("moment");
 
 
-//댓글 조회하기는.. 구현하지 않겠습니다. 
-//왜냐하면 댓글을 작성하면서 post에 푸시해주거든요..!
+//댓글 조회하기 (get)
+// const comment = async (req, res) => {
+//   const {
+//     params: {id},
+//   } = req;
+//   try{
+//     const comment = await Comment.findById(id);
 
+//   } catch (error) {
+
+//   }
+  
+//}
 
 //댓글 작성하기
 const commentUpload = async (req, res) => {
@@ -18,8 +28,7 @@ const commentUpload = async (req, res) => {
     params: { id },
     body: { text }
   } = req;
-  const post = await Post.findById(id);
-
+  const post = await Post.findById(id).populate('comments');
   try {
     const newComment = await Comment.create({
       text: text,
@@ -28,7 +37,8 @@ const commentUpload = async (req, res) => {
     });
     post.save();
     post.comments.push(newComment.id);
-    res.send({ newComment });
+    const comment = newComment;
+    res.send({comment});
 
   } catch (error) {
 
@@ -72,7 +82,7 @@ const commentDelete = async (req, res) => {
 
     await Comment.findByIdAndDelete(id);
     res.send({
-      message: '댓글 삭제 완료!'
+      //comment_id로 다시 보내주기.
     });
 
   } catch (error) {
