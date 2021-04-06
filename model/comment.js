@@ -4,7 +4,6 @@ const commentSchema = new mongoose.Schema({
 
   text: {
     type: String,
-    required: true,
   },
 
   createAt: {
@@ -13,9 +12,12 @@ const commentSchema = new mongoose.Schema({
 
   name: {
     type: String,
-    required: true,
   },
-  
+
+  profile_img: {
+    type: String,
+  }
+
 
 });
 

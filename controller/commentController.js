@@ -29,23 +29,32 @@ const commentUpload = async (req, res) => {
   const { insta_Id } = res.locals.user;
   const { name } = await User.findOne({ insta_Id });
   const {
-    body: { content, post_Id }
+    params: { id },
+    body: { content, post_Id },
   } = req;
-  const post = await Post.findOne(post_Id).populate('comments');
+  console.log("==== 클라이언트가 넘겨주는 값 =====")
+  console.log(req.body.post_Id)
+  console.log(req.body.content)
+  const post = await Post.findOne({ post_Id: post_Id }).populate('comments');
+
+
+  console.log("==== post 찾은 것 =====")
+  console.log(post)
 
   try {
-
     const newComment = await Comment.create({
       text: content,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
       name,
+      profile_img: "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/436/8142f53e51d2ec31bc0fa4bec241a919_crop.jpeg"
     });
     post.save();
     post.comments.push(newComment);
 
     const comments = post.comments
-    const comment = comments[comments.length-1];
-    res.send({ comment });
+    const realTimeComment = comments[comments.length - 1];
+    res.send({ realTimeComment });
+
   } catch (error) {
 
     res.status(400).send({
