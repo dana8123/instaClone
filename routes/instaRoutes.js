@@ -127,12 +127,30 @@ router.post("/friend_list", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
     const { name } = await User.findOne({ _id: payload.userId })
+    const { friend_list } = await User.findOne({ _id: payload.userId })
+    const recommand_list = await User.find({})
+
+    recommand_list_show = []
+
+    for (let i = 0; i < recommand_list.length; i++) {
+        console.log(recommand_list[i]["name"])
+        if (friend_list.includes(recommand_list[i]["name"]) == false) {
+            console.log(recommand_list[i]["name"])
+            recommand_list_show.push({
+                name: recommand_list[i]["name"],
+                insta_Id: recommand_list[i]["insta_Id"]
+            }
+            )
+        }
+    }
+
     // let my_nick = []
     // friend_my_Id_save = await User.findOne({ nickname: nickname });
     // my_nick.push(friend_my_Id_save)
     // await User.deleteOne({ nickname: nickname })
+
     friend_Id = await User.find({});
-    res.json({ friend_list: friend_Id, name });
+    res.send({ friend_list: recommand_list_show });
 });
 
 // 친구 추가하기
@@ -144,6 +162,7 @@ router.post("/add_friend", async (req, res, next) => {
     payload = jwt.verify(token, "team2-key");
     let { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
+
     if (friend_list.includes(add_friend_name) == true) {
         res.send("이미 친구랍니다^^")
         return
@@ -180,6 +199,8 @@ router.post("/delete_friend", async (req, res, next) => {
     // 배열 삭제
     friend_list.splice(friend_list.indexOf(friend_name), 1);
     await User.updateOne({ name: name }, { $set: { friend_list } });
+
+    res.send("친구 삭제 완료!")
 });
 
 // 내 친구 목록 보여주기 // 404오류
@@ -194,6 +215,7 @@ router.get("/my_friend_list_show", async (req, res) => {
     const { name } = await User.findOne({ _id: payload.userId })
     res.json({ my_friend_list_show: friend_list });
 });
+
 
 // // 게시글 저장하기
 // router.post("/write", async (req, res, next) => {
@@ -217,13 +239,11 @@ router.get("/my_friend_list_show", async (req, res) => {
 //     })
 // });
 
-
-
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
     console.log("==== /api/show ====")
     const { token } = req.headers;
-    const post_list = await Post.find({});
+    const post_list = await Post.find({}).sort("-post_Id");;
 
     payload = jwt.verify(token, "team2-key");
     const { friend_list } = await User.findOne({ _id: payload.userId })
@@ -240,9 +260,35 @@ router.post("/show", async (req, res) => {
     })
 });
 
+// 친구가 쓴 글만 보여주기
+router.post("/show_friend_feed", async (req, res) => {
+
+    const { token } = req.headers;
+    const post_lists = await Post.find({});
+    payload = jwt.verify(token, "team2-key");
+    const { friend_list } = await User.findOne({ _id: payload.userId })
+
+    const { name } = await User.findOne({ _id: payload.userId })
+    const { insta_Id } = await User.findOne({ _id: payload.userId })
+
+    friend_feed_list = []
+
+    for (let i = 0; i < post_lists.length; i++) {
+        if (friend_list.includes(post_lists[i]["name"]) == true) {
+            friend_feed_list.push(post_lists[i])
+        }
+    }
+    res.json({
+        post_list: friend_feed_list
+    })
+
+});
+
 // 상세 게시글 보여주기
 router.post("/show_board_detail/:instaId", async (req, res) => {
+
     const { instaId } = req.params;
+
     console.log(instaId)
     const board_list = await Board.findOne({ board_Id: instaId });
     console.log(board_list)

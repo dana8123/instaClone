@@ -3,6 +3,7 @@ const { postRouter, commentRouter } = require("./routes/Routes");
 const mongoose = require("mongoose");
 const connect = require('./model');
 const app = express();
+
 const cors = require("cors");
 
 const corsOptions = {
@@ -20,6 +21,7 @@ connect();
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 app.use(express.static('public'));
+app.use(express.static('public/static'));
 
 // 태진 파일 연결은 모두 /api로
 const instaRouter = require("./routes/instaRoutes");
