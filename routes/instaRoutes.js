@@ -18,7 +18,6 @@ app.use(cors({ origin: "*" }));
 
 // 게시글 수정, 댓글 수정
 
-
 //회원가입
 router.post("/register", async (req, res) => {
     try {
@@ -349,7 +348,6 @@ router.post("/like", async (req, res) => {
     }
 
     let post_list2 = await Post.find({});
-
     console.log(post_list2)
     res.send({ post_list: post_list2 })
 });
