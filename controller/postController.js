@@ -14,11 +14,13 @@ const postUpload = async (req, res) => {
   // const { name } = await User.findOne({ _id: payload.userId })
   // //
   const { insta_Id } = res.locals.user;
+  const { profile_img } = await User.findOne({ insta_Id });
   const { name } = await User.findOne({ insta_Id });
 
   // 파일 이름 저장하기
   let file_names = []
 
+  // try 문써서 사진 바꾸기
   for (value of req.files) {
     console.log()
     file_names.push("http://13.209.10.75/" + value.filename)
@@ -46,11 +48,13 @@ const postUpload = async (req, res) => {
       file_name: file_names,
       like_user: like_user,
       like_count: like_count,
-      createAt: moment().format("YYYY년 MM월 DD일 HH:mm")
+      createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
+      profile_img
     })
 
     const post_list = await Post.findOne({ post_Id: post_Id });
     res.send({ post_list: post_list });
+
   } catch (error) {
     res.status(400).send({
       error: '업로드하는 중 오류가 발생했습니다.'

@@ -8,10 +8,15 @@ const fs = require('fs');
 const { response } = require('express');
 const cors = require("cors");
 const moment = require("moment");
+const multer = require('multer')
+const upload = multer({ dest: 'public' });
 const app = express();
 const router = express.Router();
 
 app.use(cors({ origin: "*" }));
+
+
+// 게시글 수정, 댓글 수정
 
 //회원가입
 router.post("/register", async (req, res) => {
@@ -34,6 +39,7 @@ router.post("/register", async (req, res) => {
             insta_Id,
             name,
             friend_list,
+            profile_img: "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/436/8142f53e51d2ec31bc0fa4bec241a919_crop.jpeg",
             password: bcrypt.hashSync(password, 10),
         })
         res.send("성공입니다 ^^ 잘난척 금지")
@@ -41,9 +47,7 @@ router.post("/register", async (req, res) => {
     catch (err) {
         console.log(err);
         res.status(400).send({
-
             errorMessage: "양식을 맞춰주세용!",
-
         });
     };
 });
@@ -126,42 +130,47 @@ router.post("/test", async (req, res) => {
 router.post("/friend_list", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
+    //접속한 유저 이름 확인
     const { name } = await User.findOne({ _id: payload.userId })
+
+    // 내 친구목록 확인
     const { friend_list } = await User.findOne({ _id: payload.userId })
+
+    // 유저 전체 정보 내려받기
     const recommand_list = await User.find({})
 
+    // 추천한 유저 임시로 받을 배열
     recommand_list_show = []
 
     for (let i = 0; i < recommand_list.length; i++) {
-        console.log(recommand_list[i]["name"])
         if (friend_list.includes(recommand_list[i]["name"]) == false) {
-            console.log(recommand_list[i]["name"])
+
+            let { profile_img } = await User.findOne({ name: recommand_list[i]["name"] })
+
             recommand_list_show.push({
                 name: recommand_list[i]["name"],
-                insta_Id: recommand_list[i]["insta_Id"]
-            }
-            )
+                insta_Id: recommand_list[i]["insta_Id"],
+                profile_img: profile_img
+            })
         }
     }
-
-    // let my_nick = []
-    // friend_my_Id_save = await User.findOne({ nickname: nickname });
-    // my_nick.push(friend_my_Id_save)
-    // await User.deleteOne({ nickname: nickname })
-
-    friend_Id = await User.find({});
     res.send({ friend_list: recommand_list_show });
+
 });
 
 // 친구 추가하기
 router.post("/add_friend", async (req, res, next) => {
     console.log('== 친구 추가 발동! ==')
+
     const add_friend_name = req.body.name;
+
     console.log(add_friend_name)
+
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
     let { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
+    let { profile_img } = await User.findOne({ name: add_friend_name })
 
     if (friend_list.includes(add_friend_name) == true) {
         res.send("이미 친구랍니다^^")
@@ -169,19 +178,27 @@ router.post("/add_friend", async (req, res, next) => {
     }
     friend_list.push(add_friend_name)
     await User.updateOne({ name }, { $set: { friend_list } });
-    res.send("친구 추가 완료 ^^")
+
+    new_friend = {
+        name: add_friend_name,
+        profile_img: profile_img,
+    }
+
+    res.send({ new_friend })
 });
 
-// 체크하기
+// 체크하기 //
 router.post("/check", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
     const { name } = await User.findOne({ _id: payload.userId })
     const { insta_Id } = await User.findOne({ _id: payload.userId })
+    const { profile_img } = await User.findOne({ _id: payload.userId })
 
     res.json({
         name: name,
         insta_Id: insta_Id,
+        profile_img: profile_img,
     })
 })
 
@@ -189,55 +206,62 @@ router.post("/check", async (req, res) => {
 router.post("/delete_friend", async (req, res, next) => {
     console.log('== 친구 삭제 발동! ==')
 
-    const friend_name = req.body.name;
-    const { token } = req.headers;
+    const delete_friend_name = req.body.name;
+    console.log(delete_friend_name)
 
+    const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
+
     let { friend_list } = await User.findOne({ _id: payload.userId });
     const { name } = await User.findOne({ _id: payload.userId });
+    let { profile_img } = await User.findOne({ name: delete_friend_name })
+
+    console.log(friend_list)
 
     // 배열 삭제
-    friend_list.splice(friend_list.indexOf(friend_name), 1);
+    friend_list.splice(friend_list.indexOf(delete_friend_name), 1);
     await User.updateOne({ name: name }, { $set: { friend_list } });
 
-    res.send("친구 삭제 완료!")
+    console.log(friend_list)
+
+    delete_friend = {
+        name: delete_friend_name,
+        profile_img: profile_img,
+    }
+
+    res.send({ delete_friend })
 });
 
-// 내 친구 목록 보여주기 // 404오류
+// 내 친구 목록 보여주기 //
 router.get("/my_friend_list_show", async (req, res) => {
 
     console.log(" == 친구목록 확인 완료 ^^ ==")
-
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
 
-    const { friend_list } = await User.findOne({ _id: payload.userId })
-    const { name } = await User.findOne({ _id: payload.userId })
-    res.json({ my_friend_list_show: friend_list });
+    const { friend_list } = await User.findOne({ _id: payload.userId });
+    const { name } = await User.findOne({ _id: payload.userId });
+
+
+
+    my_friend_list = []
+
+    for (let i = 0; i < friend_list.length; i++) {
+        let { profile_img } = await User.findOne({ name: friend_list[i] })
+
+        my_friend_list.push({
+            name: friend_list[i],
+            profile_img: profile_img
+        })
+    }
+
+    res.json({ my_friend_list_show: my_friend_list });
+
+
+
+
+
 });
-
-
-// // 게시글 저장하기
-// router.post("/write", async (req, res, next) => {
-//     console.log("발동중")
-//     const board_show = req.body.board;
-//     const { token } = req.headers;
-//     payload = jwt.verify(token, "team2-key");
-//     const { nickname } = await User.findOne({ _id: payload.userId })
-//     let like_user = []
-//     let like_count = 0
-//     let board_Id = 0
-//     let data = await Board.find({}).sort("-board_Id")
-//     if (data.length == 0) { post_Id = 1 }
-//     else { post_Id = data[0]["post _Id"] + 1 }
-//     await Board.create({
-//         board_Id,
-//         board_show,
-//         nickname,
-//         like_user,
-//         like_count,
-//     })
-// });
 
 // 메인 피드 보여주기 게시글 보여주기
 router.post("/show", async (req, res) => {
@@ -250,13 +274,14 @@ router.post("/show", async (req, res) => {
 
     const { name } = await User.findOne({ _id: payload.userId })
     const { insta_Id } = await User.findOne({ _id: payload.userId })
+    const { profile_img } = await User.findOne({ _id: payload.userId })
 
     const existUsers = await User.findOne({ insta_Id: insta_Id });
     // 접속한 사람의 친구목록을 받아온 후
     // for문을 돌려서 post의 name이 포함되어있는지 확인 후
     // 있는 것만 배열에 넣고 전송하기
     res.send({
-        post_list: post_list
+        post_list: post_list,
     })
 });
 
@@ -286,9 +311,7 @@ router.post("/show_friend_feed", async (req, res) => {
 
 // 상세 게시글 보여주기
 router.post("/show_board_detail/:instaId", async (req, res) => {
-
     const { instaId } = req.params;
-
     console.log(instaId)
     const board_list = await Board.findOne({ board_Id: instaId });
     console.log(board_list)
@@ -325,9 +348,37 @@ router.post("/like", async (req, res) => {
     }
 
     let post_list2 = await Post.find({});
-
     console.log(post_list2)
     res.send({ post_list: post_list2 })
+});
+
+// 프로필 이미지 추가
+router.post("/profile_img_save", upload.single('file'), async (req, res, next) => {
+
+    console.log("프로필 이미지 추가중입니다.")
+
+    const { token } = req.headers;
+    payload = jwt.verify(token, "team2-key");
+    const { name } = await User.findOne({ _id: payload.userId })
+    const { insta_Id } = await User.findOne({ _id: payload.userId })
+
+
+    let profile_img = ""
+    try {
+        profile_img = "http://13.209.10.75/" + req.file.filename
+    } catch {
+        profile_img = "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/436/8142f53e51d2ec31bc0fa4bec241a919_crop.jpeg"
+    }
+
+    await User.updateOne({ name: name }, { $set: { profile_img } });
+    res.send(
+        {
+            insta_Id: insta_Id,
+            name: name,
+            profile_img: profile_img,
+        }
+    )
+
 });
 
 module.exports = router;
