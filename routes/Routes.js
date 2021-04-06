@@ -18,9 +18,9 @@ postRouter.post('/detail/:id', detail);
 postRouter.put('/detail/:id/edit', postEdit);
 postRouter.delete('/detail/:id/delete', deletePost);
 
-commentRouter.post('api/add_comment', authMiddleware, commentUpload);
-commentRouter.get('api/set_comment', comment);
-commentRouter.put('/:id/comment/edit', commentEdit);
-commentRouter.delete('/:id/comment/delete', commentDelete);
+commentRouter.post('/api/add_comment', authMiddleware, commentUpload);
+commentRouter.get('/api/set_comment', comment);
+commentRouter.put('/api/update_comment', commentEdit);
+commentRouter.delete('/api/delete_comment', commentDelete);
 
 module.exports = { postRouter, commentRouter };

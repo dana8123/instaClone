@@ -29,7 +29,6 @@ const commentUpload = async (req, res) => {
   const { insta_Id } = res.locals.user;
   const { name } = await User.findOne({ insta_Id });
   const {
-    params: { id },
     body: { content, post_Id },
   } = req;
   console.log("==== 클라이언트가 넘겨주는 값 =====")
@@ -69,12 +68,11 @@ const commentUpload = async (req, res) => {
 //댓글 수정하기
 const commentEdit = async (req, res) => {
   const {
-    params: { id },
-    body: { text }
+    body: { content , post_Id }
   } = req;
   try {
 
-    await Comment.findByIdAndUpdate(id, { text });
+    await Comment.findOneAndUpdate(post_Id,{ content })
     res.send({
       message: '댓글 수정 완료!'
     })
@@ -92,13 +90,13 @@ const commentEdit = async (req, res) => {
 //삭제하기
 const commentDelete = async (req, res) => {
   const {
-    params: { id }
+    body: { post_Id }
   } = req;
   try {
 
-    await Comment.findByIdAndDelete(id);
+    await Comment.findOneAndDelete(post_Id);
     res.send({
-      //comment_id로 다시 보내주기.
+      message: '삭제완료!'
     });
 
   } catch (error) {
