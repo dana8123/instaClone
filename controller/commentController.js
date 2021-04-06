@@ -28,6 +28,8 @@ const commentUpload = async (req, res) => {
     });
     post.save();
     post.comments.push(newComment.id);
+
+
     res.send({ newComment });
 
   } catch (error) {
