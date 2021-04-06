@@ -5,7 +5,8 @@ const { postUpload,
     deletePost } = require("../controller/postController.js");
 const { commentUpload,
     commentDelete,
-    commentEdit } = require("../controller/commentController.js");
+    commentEdit,
+    comment } = require("../controller/commentController.js");
 const authMiddleware = require("../middlewares/auth-middleware.js");
 const multer = require('multer');
 const upload = multer({ dest: 'public' })
@@ -19,7 +20,8 @@ postRouter.post('/detail/:id', detail);
 postRouter.put('/detail/:id/edit', postEdit);
 postRouter.delete('/detail/:id/delete', deletePost);
 
-commentRouter.post('/:id/comment', authMiddleware, commentUpload);
+commentRouter.post('api/add_comment', authMiddleware, commentUpload);
+commentRouter.get('api/set_comment', comment);
 commentRouter.put('/:id/comment/edit', commentEdit);
 commentRouter.delete('/:id/comment/delete', commentDelete);
 
