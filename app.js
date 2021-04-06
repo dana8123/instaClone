@@ -10,6 +10,7 @@ const corsOptions = {
   origin: '*',
   credentials: true,
 };
+// token이나 세션으로 별도의 인증 /
 
 app.use(cors(corsOptions));
 connect();
@@ -30,7 +31,6 @@ app.use("/api", [instaRouter]);
 //Router middlewares
 app.use(postRouter);
 app.use(commentRouter);
-
 
 // 임시 프론트 // 로그인 후 글쓰기는 ARC로 해결 안되는 듯
 app.set('views', __dirname + '/views');
