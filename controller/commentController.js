@@ -29,17 +29,20 @@ const commentUpload = async (req, res) => {
     body: { text }
   } = req;
   const post = await Post.findById(id).populate('comments');
+
   try {
+
     const newComment = await Comment.create({
       text: text,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
       name,
     });
     post.save();
-    post.comments.push(newComment.id);
-    const comment = newComment;
-    res.send({comment});
+    post.comments.push(newComment);
 
+    const comments = post.comments
+    const realTimeComment = comments[comments.length-1];
+    res.send({ realTimeComment });
   } catch (error) {
 
     res.status(400).send({
@@ -49,6 +52,7 @@ const commentUpload = async (req, res) => {
 
   }
 };
+
 
 //댓글 수정하기
 const commentEdit = async (req, res) => {
