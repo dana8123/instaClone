@@ -16,9 +16,11 @@ const commentSchema = new mongoose.Schema({
 
   profile_img: {
     type: String,
+  },
+
+  comment_Id: {
+    type: Number,
   }
-
-
 });
 
 module.exports = mongoose.model("Comment", commentSchema);

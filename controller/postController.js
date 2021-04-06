@@ -12,7 +12,6 @@ const postUpload = async (req, res) => {
   // // 글쓴이 이름 파악하기
   // payload = jwt.verify(token, "team2-key");
   // const { name } = await User.findOne({ _id: payload.userId })
-  // //
   const { insta_Id } = res.locals.user;
   const { profile_img } = await User.findOne({ insta_Id });
   const { name } = await User.findOne({ insta_Id });
@@ -123,6 +122,5 @@ const deletePost = async (req, res) => {
     });
   };
 };
-
 
 module.exports = { postUpload, detail, postEdit, deletePost };
