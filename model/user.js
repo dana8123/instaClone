@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     name: String,
     password: String,
     friend_list: Array,
+    profile_img: String,
 });
 
 UserSchema.virtual("userId").get(function () {

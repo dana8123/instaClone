@@ -24,6 +24,9 @@ const postSchema = new Schema({
   like_count: {
     type: Number,
   },
+  profile_img: {
+    type: String,
+  },
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
