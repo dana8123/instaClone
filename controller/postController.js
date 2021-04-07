@@ -82,16 +82,14 @@ const detail = async (req, res) => {
 
 // 수정하기
 const postEdit = async (req, res) => {
-  const { insta_Id } = res.locals.user;
   const {
-    body: { content, post_Id, name, file_name }
+    body: { content, post_Id }
   } = req;
   try {
 
-      await Post.findByOneAndUpdate(post_Id, { content, file_name });
-      const post_list = findOne(post_Id);
+      await Post.findByOneAndUpdate({post_Id}, { content });
+      const post_list = await Post.findOne({post_Id});
       res.send({
-        message: '수정완료!',
         post_list
       })
 

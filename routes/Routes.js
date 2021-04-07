@@ -15,7 +15,7 @@ const commentRouter = express.Router();
 
 postRouter.post('/upload', authMiddleware, upload.array('file'), postUpload);
 postRouter.post('/detail/:id', detail);
-postRouter.put('/detail/edit', authMiddleware, postEdit);
+postRouter.put('/detail/edit', postEdit);
 postRouter.delete('/detail/delete', deletePost);
 
 commentRouter.post('/api/add_comment', authMiddleware, commentUpload);
