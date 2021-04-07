@@ -368,7 +368,20 @@ router.post("/profile_img_save", upload.single('file'), async (req, res, next) =
             profile_img: profile_img,
         }
     )
+});
 
+// 퍼스널 개인
+router.post("/personal_feed", async (req, res) => {
+    const { name } = req.body;
+
+    const { insta_Id } = await User.findOne({ name: name });
+    const { profile_img } = await User.findOne({ name: name });
+
+    res.json({
+        insta_Id: insta_Id,
+        profile_img: profile_img,
+        name: name,
+    });
 });
 
 module.exports = router;
