@@ -17,9 +17,9 @@ connect();
 
 // cors 특정해야하는 부분 해결
 // app.use(cors({ origin: "*" }));
-
 //
-app.use(express.urlencoded({ extended: false }))
+//
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.static('public/static'));

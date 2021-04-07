@@ -9,7 +9,7 @@ const comment = async (req, res) => {
   const {
     body: { post_Id }
   } = req;
-  // ㅎㅎ 중괄호를 써야..
+
   const post = await Post.findOne({ post_Id: post_Id }).populate('comments');
 
   try {

@@ -14,11 +14,8 @@ const app = express();
 const router = express.Router();
 
 app.use(cors({ origin: "*" }));
-
-
 // 게시글 수정, 댓글 수정
-
-//회원가입
+// 회원가입
 router.post("/register", async (req, res) => {
     try {
         const { insta_Id, name, password } = req.body;
@@ -34,7 +31,6 @@ router.post("/register", async (req, res) => {
         };
 
         let friend_list = [name]
-
         await User.create({
             insta_Id,
             name,
@@ -69,8 +65,6 @@ router.post("/login", async (req, res) => {
             // console.log(date.getTime())
             // // 이거 만료 시간 앞에 2가 2시간임. 10으로하면 10시간
             // date.setTime(date.getTime() + 2 * 60 * 60 * 1000),
-
-
             // payload 이거가 암호화하기
 
             payload = {
@@ -105,7 +99,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// jwt로그인 실험용
+// jwt로그인 실험용 //
 router.post("/test", async (req, res) => {
     const token = req.body.token;
     payload = jwt.verify(token, "team2-key");
@@ -126,7 +120,7 @@ router.post("/test", async (req, res) => {
     console.log("==== 끝 =====")
 });
 
-// 친구 추천 보여주기
+// 친구 추천 보여주기 //
 router.post("/friend_list", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");
@@ -158,7 +152,7 @@ router.post("/friend_list", async (req, res) => {
 
 });
 
-// 친구 추가하기
+// 친구 추가하기 //
 router.post("/add_friend", async (req, res, next) => {
     console.log('== 친구 추가 발동! ==')
 
@@ -200,9 +194,9 @@ router.post("/check", async (req, res) => {
         insta_Id: insta_Id,
         profile_img: profile_img,
     })
-})
+});
 
-// 친구 삭제하기
+// 친구 삭제하기 //
 router.post("/delete_friend", async (req, res, next) => {
     console.log('== 친구 삭제 발동! ==')
 
@@ -257,13 +251,9 @@ router.get("/my_friend_list_show", async (req, res) => {
 
     res.json({ my_friend_list_show: my_friend_list });
 
-
-
-
-
 });
 
-// 메인 피드 보여주기 게시글 보여주기
+// 메인 피드 보여주기 게시글 보여주기 //
 router.post("/show", async (req, res) => {
     console.log("==== /api/show ====")
     const { token } = req.headers;
@@ -285,7 +275,7 @@ router.post("/show", async (req, res) => {
     })
 });
 
-// 친구가 쓴 글만 보여주기
+// 친구가 쓴 글만 보여주기 //
 router.post("/show_friend_feed", async (req, res) => {
 
     const { token } = req.headers;
@@ -309,7 +299,7 @@ router.post("/show_friend_feed", async (req, res) => {
 
 });
 
-// 상세 게시글 보여주기
+// 상세 게시글 보여주기 //
 router.post("/show_board_detail/:instaId", async (req, res) => {
     const { instaId } = req.params;
     console.log(instaId)
@@ -318,7 +308,7 @@ router.post("/show_board_detail/:instaId", async (req, res) => {
     res.json({ board_list: board_list });
 });
 
-// 좋아요
+// 좋아요 //
 router.post("/like", async (req, res) => {
     const { post_Id } = req.body;
     const { token } = req.headers;
