@@ -19,6 +19,10 @@ const postSchema = new Schema({
     required: true
   },
 
+  insta_Id: {
+    type: String,
+  },
+
   content: {
     type: String,
   },
