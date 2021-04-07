@@ -109,8 +109,10 @@ const deletePost = async (req, res) => {
     body: { post_Id }
   } = req;
 
+  console.log(post_Id)
+
   try {
-    await findByOneAndDelete(post_Id);
+    await Post.deleteOne({ post_Id: post_Id });
     res.send({
       message: '삭제완료!'
     });
