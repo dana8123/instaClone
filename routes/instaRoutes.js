@@ -375,15 +375,17 @@ router.post("/profile_img_save", upload.single('file'), async (req, res, next) =
 
 // 개인 피드 이동할 때 쓰임
 router.post("/personal_feed", async (req, res) => {
-    const { name } = req.body;
 
-    const { insta_Id } = await User.findOne({ name: name });
-    const { profile_img } = await User.findOne({ name: name });
+    const { insta_Id } = req.body;
+
+    const { name } = await User.findOne({ insta_Id: insta_Id });
+    const { profile_img } = await User.findOne({ insta_Id: insta_Id });
+    const { insta_Id2 } = await User.findOne({ insta_Id: insta_Id });
 
     res.json({
         insta_Id: insta_Id,
-        profile_img: profile_img,
         name: name,
+        profile_img: profile_img,
     });
 });
 

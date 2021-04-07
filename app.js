@@ -48,6 +48,9 @@ app.get('/home', (req, res) => {
 app.get('/detail', (req, res) => {
   res.render('detail')
 })
+app.get('/index', (req, res) => {
+  res.render('index')
+})
 
 app.listen(3000, () => {
   console.log(`서버가 연결되었습니다.`);
