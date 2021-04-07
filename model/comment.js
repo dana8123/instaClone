@@ -10,7 +10,7 @@ const commentSchema = new mongoose.Schema({
     type: String,
   },
 
-  name: {
+  insta_Id: {
     type: String,
   },
 
