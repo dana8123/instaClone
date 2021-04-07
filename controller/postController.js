@@ -112,6 +112,8 @@ const deletePost = async (req, res) => {
     body: { post_Id }
   } = req;
 
+  console.log(post_Id)
+
   try {
     await Post.deleteOne({ post_Id: post_Id });
     res.send({
