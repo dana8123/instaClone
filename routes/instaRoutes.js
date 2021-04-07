@@ -12,8 +12,9 @@ const multer = require('multer')
 const upload = multer({ dest: 'public' });
 const app = express();
 const router = express.Router();
-
 app.use(cors({ origin: "*" }));
+
+
 // 게시글 수정, 댓글 수정
 // 회원가입
 router.post("/register", async (req, res) => {

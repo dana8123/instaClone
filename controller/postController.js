@@ -82,20 +82,21 @@ const detail = async (req, res) => {
 
 // 수정하기
 const postEdit = async (req, res) => {
-  const { insta_Id } = res.locals.user;
+  console.log("안녕^^!")
+  console.log(req.body)
   const {
-    body: { content, post_Id, name, file_name }
+    body: { content, post_Id }
   } = req;
   try {
 
-      await Post.findByOneAndUpdate(post_Id, { content, file_name });
-      const post_list = findOne(post_Id);
-      res.send({
-        message: '수정완료!',
-        post_list
-      })
+    // await Post.findByOneAndUpdate({ post_Id }, { content });
+    await Post.updateOne({ post_Id }, { $set: { content } });
+    const post_list = await Post.findOne({ post_Id: post_Id });
+    res.send({
+      post_list
+    })
 
-    } catch (error) {
+  } catch (error) {
     console.log(error);
     res.status(400).send({
       error: '수정하기에서 오류가 발생했습니다.'
