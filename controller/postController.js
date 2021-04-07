@@ -86,7 +86,7 @@ const postEdit = async (req, res) => {
     body: { content, id, name, file_name }
   } = req;
   try {
-    //TODO : Client에서 글쓴이 변수가 뭔지?
+    //TODO : Client에서 글쓴이 변수가 뭔지?, client에서 objectId로 보내주면 굳이 ..? 명찰을 왜 또 달지?
     if (insta_Id === name) {
       await Post.findByIdAndUpdate(id, { content, file_name });
       res.send({
@@ -108,11 +108,11 @@ const postEdit = async (req, res) => {
 //삭제하기
 const deletePost = async (req, res) => {
   const {
-    params: { id }
+    body: { post_Id }
   } = req;
 
   try {
-    await findByIdAndDelete(id);
+    await findByOneAndDelete(post_Id);
     res.send({
       message: '삭제완료!'
     });
