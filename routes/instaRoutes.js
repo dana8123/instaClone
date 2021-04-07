@@ -165,6 +165,7 @@ router.post("/add_friend", async (req, res, next) => {
     let { friend_list } = await User.findOne({ _id: payload.userId })
     const { name } = await User.findOne({ _id: payload.userId })
     let { profile_img } = await User.findOne({ name: add_friend_name })
+    let { insta_Id } = await User.findOne({ name: add_friend_name })
 
     if (friend_list.includes(add_friend_name) == true) {
         res.send("이미 친구랍니다^^")
@@ -174,6 +175,7 @@ router.post("/add_friend", async (req, res, next) => {
     await User.updateOne({ name }, { $set: { friend_list } });
 
     new_friend = {
+        insta_Id: insta_Id,
         name: add_friend_name,
         profile_img: profile_img,
     }
@@ -236,16 +238,17 @@ router.get("/my_friend_list_show", async (req, res) => {
     const { friend_list } = await User.findOne({ _id: payload.userId });
     const { name } = await User.findOne({ _id: payload.userId });
 
-
-
     my_friend_list = []
 
     for (let i = 0; i < friend_list.length; i++) {
         let { profile_img } = await User.findOne({ name: friend_list[i] })
+        let { insta_Id } = await User.findOne({ name: friend_list[i] })
 
         my_friend_list.push({
             name: friend_list[i],
-            profile_img: profile_img
+            insta_Id: insta_Id,
+            profile_img: profile_img,
+
         })
     }
 
@@ -370,7 +373,7 @@ router.post("/profile_img_save", upload.single('file'), async (req, res, next) =
     )
 });
 
-// 퍼스널 개인
+// 개인 피드 이동할 때 쓰임
 router.post("/personal_feed", async (req, res) => {
     const { name } = req.body;
 

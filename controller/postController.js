@@ -44,6 +44,7 @@ const postUpload = async (req, res) => {
       post_Id,
       content,
       name,
+      insta_Id,
       file_name: file_names,
       like_user: like_user,
       like_count: like_count,
