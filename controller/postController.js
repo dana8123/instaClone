@@ -84,21 +84,18 @@ const detail = async (req, res) => {
 const postEdit = async (req, res) => {
   const { insta_Id } = res.locals.user;
   const {
-    body: { content, id, name, file_name }
+    body: { content, post_Id, name, file_name }
   } = req;
   try {
-    //TODO : Client에서 글쓴이 변수가 뭔지?, client에서 objectId로 보내주면 굳이 ..? 명찰을 왜 또 달지?
-    if (insta_Id === name) {
-      await Post.findByIdAndUpdate(id, { content, file_name });
+
+      await Post.findByOneAndUpdate(post_Id, { content, file_name });
+      const post_list = findOne(post_Id);
       res.send({
-        message: '수정완료!'
+        message: '수정완료!',
+        post_list
       })
-    } else {
-      res.send({
-        error: '작성자만 수정할 수 있습니다.'
-      })
-    }
-  } catch (error) {
+
+    } catch (error) {
     console.log(error);
     res.status(400).send({
       error: '수정하기에서 오류가 발생했습니다.'
