@@ -13,6 +13,9 @@ const commentSchema = new mongoose.Schema({
   insta_Id: {
     type: String,
   },
+  name: {
+    type: String,
+  },
 
   profile_img: {
     type: String,

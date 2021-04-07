@@ -31,6 +31,7 @@ const comment = async (req, res) => {
 const commentUpload = async (req, res) => {
   console.log("==댓글 작성==")
   const { insta_Id } = res.locals.user;
+  const { name } = await User.findOne({ insta_Id });
   const { profile_img } = await User.findOne({ insta_Id });
   const {
     body: { content, post_Id },
@@ -50,6 +51,7 @@ const commentUpload = async (req, res) => {
       text: content,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
       insta_Id,
+      name,
       profile_img: profile_img,
     });
 
