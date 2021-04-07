@@ -81,13 +81,14 @@ const detail = async (req, res) => {
 
 // 수정하기
 const postEdit = async (req, res) => {
+  const { insta_Id } = res.locals.user;
   const {
-    params: { id },
-    body: { content }
+    body: { content, id, name, file_name }
   } = req;
   try {
-    if (user === post.author) {
-      await Post.findByIdAndUpdate(id, { content });
+    //TODO : Client에서 글쓴이 변수가 뭔지?
+    if (insta_Id === name) {
+      await Post.findByIdAndUpdate(id, { content, file_name });
       res.send({
         message: '수정완료!'
       })
