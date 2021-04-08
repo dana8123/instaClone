@@ -10,11 +10,10 @@ const comment = async (req, res) => {
     body: { post_Id }
   } = req;
 
-  commentId = await Comments.find({ post_Id: post_Id }).sort("-comment_Id");
+  commentId = await Comment.find({ post_Id: post_Id }).sort("-comment_Id");
 
   try {
     // const comment = post["comments"]
-
     // const comments = post.comments
     // console.log(comments)
     res.send({ comments: commentId });
