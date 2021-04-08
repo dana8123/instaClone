@@ -10,14 +10,14 @@ const comment = async (req, res) => {
     body: { post_Id }
   } = req;
 
-  const post = await Post.findOne({ post_Id: post_Id }).populate('comments');
+  commentId = await Comments.find({ post_Id: post_Id }).sort("-comment_Id");
 
   try {
     // const comment = post["comments"]
 
-    const comments = post.comments
-    console.log(comments)
-    res.send({ comments });
+    // const comments = post.comments
+    // console.log(comments)
+    res.send({ comments: commentId });
 
   } catch (error) {
     res.send({
@@ -37,13 +37,18 @@ const commentUpload = async (req, res) => {
     body: { content, post_Id },
   } = req;
 
+
   // 댓글 고유값
   let comment_Id = 0
   let data = await Comment.find({}).sort("-comment_Id")
   if (data.length == 0) { comment_Id = 1 }
   else { comment_Id = data[0]["comment_Id"] + 1 }
 
-  const post = await Post.findOne({ post_Id: post_Id }).populate('comments');
+  // const post = await Post.findOne({ post_Id: post_Id }).populate('comments');
+
+  const { comments } = await Post.findOne({ post_Id });
+  comments.push(comment_Id)
+  await Post.updateOne({ post_Id }, { $set: { comments } });
 
   try {
     const newComment = await Comment.create({
@@ -52,14 +57,17 @@ const commentUpload = async (req, res) => {
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
       insta_Id,
       name,
+      post_Id,
       profile_img: profile_img,
     });
 
-    post.save();
-    post.comments.push(newComment);
+    // post.save();
+    // post.comments.push(newComment);
 
-    const comments = post.comments
-    const realTimeComment = comments[comments.length - 1];
+    // const comments = post.comments
+    // const realTimeComment = comments[comments.length - 1];
+
+    const realTimeComment = await Comment.findOne({ comment_Id: comment_Id })
     res.send({ realTimeComment });
 
   } catch (error) {
@@ -91,11 +99,18 @@ const commentEdit = async (req, res) => {
 //삭제하기
 const commentDelete = async (req, res) => {
   const {
-    body: { comment_Id }
+    body: { comment_Id, post_Id }
   } = req;
-
+  console.log(req.body)
   try {
     await Comment.deleteOne({ comment_Id: comment_Id });
+    let { comments } = await Post.findOne({ post_Id: post_Id });
+
+    console.log("===코멘트 입니다=============================")
+    console.log(comments)
+
+    comments.splice(comments.indexOf([comment_Id]), 1);
+    await Post.updateOne({ post_Id }, { $set: { comments } });
 
     res.send({
       message: '삭제완료!'

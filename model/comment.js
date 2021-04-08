@@ -23,7 +23,11 @@ const commentSchema = new mongoose.Schema({
 
   comment_Id: {
     type: Number,
-  }
+  },
+
+  post_Id: {
+    type: Number,
+  },
 
 });
 

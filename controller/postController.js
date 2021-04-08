@@ -39,6 +39,8 @@ const postUpload = async (req, res) => {
     body: { content }
   } = req;
 
+  const comments = []
+
   try {
     const newPost = await Post.create({
       post_Id,
@@ -49,7 +51,8 @@ const postUpload = async (req, res) => {
       like_user: like_user,
       like_count: like_count,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
-      profile_img
+      profile_img,
+      comments,
     })
 
     const post_list = await Post.findOne({ post_Id: post_Id });
@@ -110,10 +113,9 @@ const deletePost = async (req, res) => {
     body: { post_Id }
   } = req;
 
-  console.log(post_Id)
-
   try {
     await Post.deleteOne({ post_Id: post_Id });
+    await Post.delete({ post_Id: post_Id });
     res.send({
       message: '삭제완료!'
     });
