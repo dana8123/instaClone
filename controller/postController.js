@@ -39,6 +39,8 @@ const postUpload = async (req, res) => {
     body: { content }
   } = req;
 
+  const comments = []
+
   try {
     const newPost = await Post.create({
       post_Id,
@@ -49,7 +51,8 @@ const postUpload = async (req, res) => {
       like_user: like_user,
       like_count: like_count,
       createAt: moment().format("YYYY년 MM월 DD일 HH:mm"),
-      profile_img
+      profile_img,
+      comments,
     })
 
     const post_list = await Post.findOne({ post_Id: post_Id });
@@ -82,18 +85,24 @@ const detail = async (req, res) => {
 
 // 수정하기
 const postEdit = async (req, res) => {
+<<<<<<< HEAD
+=======
+  console.log("안녕^^!")
+  console.log(req.body)
+>>>>>>> 565a7c629774b026d7c8cb23148ab62173bbf228
   const {
     body: { content, post_Id }
   } = req;
   try {
 
-      await Post.findByOneAndUpdate({post_Id}, { content });
-      const post_list = await Post.findOne({post_Id});
-      res.send({
-        post_list
-      })
+    // await Post.findByOneAndUpdate({ post_Id }, { content });
+    await Post.updateOne({ post_Id }, { $set: { content } });
+    const post_list = await Post.findOne({ post_Id: post_Id });
+    res.send({
+      post_list
+    })
 
-    } catch (error) {
+  } catch (error) {
     console.log(error);
     res.status(400).send({
       error: '수정하기에서 오류가 발생했습니다.'
@@ -107,10 +116,9 @@ const deletePost = async (req, res) => {
     body: { post_Id }
   } = req;
 
-  console.log(post_Id)
-
   try {
     await Post.deleteOne({ post_Id: post_Id });
+    await Post.delete({ post_Id: post_Id });
     res.send({
       message: '삭제완료!'
     });

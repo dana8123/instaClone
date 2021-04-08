@@ -1,12 +1,15 @@
 const express = require("express");
+
 const { postUpload,
     detail,
     postEdit,
     deletePost } = require("../controller/postController.js");
+
 const { commentUpload,
     commentDelete,
     commentEdit,
     comment } = require("../controller/commentController.js");
+
 const authMiddleware = require("../middlewares/auth-middleware.js");
 const multer = require('multer');
 const upload = multer({ dest: 'public' })
