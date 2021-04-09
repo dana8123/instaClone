@@ -32,26 +32,6 @@ app.use("/api", [instaRouter]);
 app.use(postRouter);
 app.use(commentRouter);
 
-// 임시 프론트 // 로그인 후 글쓰기는 ARC로 해결 안되는 듯
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-app.get('/join', (req, res) => {
-  res.render('join')
-})
-app.get('/home', (req, res) => {
-  res.render('home')
-})
-app.get('/detail', (req, res) => {
-  res.render('detail')
-})
-app.get('/index', (req, res) => {
-  res.render('index')
-})
-
 app.listen(3000, () => {
   console.log(`서버가 연결되었습니다.`);
 });

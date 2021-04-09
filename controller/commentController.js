@@ -13,9 +13,6 @@ const comment = async (req, res) => {
   commentId = await Comment.find({ post_Id: post_Id }).sort("-comment_Id");
 
   try {
-    // const comment = post["comments"]
-    // const comments = post.comments
-    // console.log(comments)
     res.send({ comments: commentId });
 
   } catch (error) {
@@ -43,8 +40,6 @@ const commentUpload = async (req, res) => {
   if (data.length == 0) { comment_Id = 1 }
   else { comment_Id = data[0]["comment_Id"] + 1 }
 
-  // const post = await Post.findOne({ post_Id: post_Id }).populate('comments');
-
   const { comments } = await Post.findOne({ post_Id });
   comments.push(comment_Id)
   await Post.updateOne({ post_Id }, { $set: { comments } });
@@ -59,12 +54,6 @@ const commentUpload = async (req, res) => {
       post_Id,
       profile_img: profile_img,
     });
-
-    // post.save();
-    // post.comments.push(newComment);
-
-    // const comments = post.comments
-    // const realTimeComment = comments[comments.length - 1];
 
     const realTimeComment = await Comment.findOne({ comment_Id: comment_Id })
     res.send({ realTimeComment });
@@ -104,9 +93,6 @@ const commentDelete = async (req, res) => {
   try {
     await Comment.deleteOne({ comment_Id: comment_Id });
     let { comments } = await Post.findOne({ post_Id: post_Id });
-
-    console.log("===코멘트 입니다=============================")
-    console.log(comments)
 
     comments.splice(comments.indexOf([comment_Id]), 1);
     await Post.updateOne({ post_Id }, { $set: { comments } });

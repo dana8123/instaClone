@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
             profile_img: "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/436/8142f53e51d2ec31bc0fa4bec241a919_crop.jpeg",
             password: bcrypt.hashSync(password, 10),
         })
-        res.send("성공입니다 ^^ 잘난척 금지")
+        res.send("회원가입 완료")
     }
     catch (err) {
         console.log(err);
@@ -155,7 +155,6 @@ router.post("/friend_list", async (req, res) => {
 
 // 친구 추가하기 //
 router.post("/add_friend", async (req, res, next) => {
-    console.log('== 친구 추가 발동! ==')
 
     const add_friend_name = req.body.name;
 
@@ -184,7 +183,7 @@ router.post("/add_friend", async (req, res, next) => {
     res.send({ new_friend })
 });
 
-// 체크하기 //
+// 현재 접속한 user 정보 확인하기
 router.post("/check", async (req, res) => {
     const { token } = req.headers;
     payload = jwt.verify(token, "team2-key");

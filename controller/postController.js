@@ -8,10 +8,7 @@ const upload = multer({ dest: 'public' })
 
 // 글쓰기 post("/upload")
 const postUpload = async (req, res) => {
-  // const { token } = req.headers;
-  // // 글쓴이 이름 파악하기
-  // payload = jwt.verify(token, "team2-key");
-  // const { name } = await User.findOne({ _id: payload.userId })
+
   const { insta_Id } = res.locals.user;
   const { profile_img } = await User.findOne({ insta_Id });
   const { name } = await User.findOne({ insta_Id });
@@ -85,17 +82,11 @@ const detail = async (req, res) => {
 
 // 수정하기
 const postEdit = async (req, res) => {
-<<<<<<< HEAD
-=======
-  console.log("안녕^^!")
-  console.log(req.body)
->>>>>>> 565a7c629774b026d7c8cb23148ab62173bbf228
   const {
     body: { content, post_Id }
   } = req;
   try {
 
-    // await Post.findByOneAndUpdate({ post_Id }, { content });
     await Post.updateOne({ post_Id }, { $set: { content } });
     const post_list = await Post.findOne({ post_Id: post_Id });
     res.send({

@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/user");
 
-// 이거 3번째에 모듈로 안 넣어줘도 적용되는거 물어보기
-// (req, res, authmiddlewares) 이렇게 안 해도 되는 듯
+
+//사용자 인증 미들웨어
+
 module.exports = (req, res, next) => {
     const { token } = req.headers;
 
