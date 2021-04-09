@@ -152,6 +152,6 @@ dist/
 tmp/
 temp/
 
-.views/
+views/
 
 # End of https://www.toptal.com/developers/gitignore/api/expressionengine,node
