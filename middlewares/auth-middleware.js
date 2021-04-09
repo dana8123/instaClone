@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
 
     if (!token) {
         res.status(401).send({
-            errorMessage: "로그인 후 이용 가능한 기능입니다.",
+            errorMessage: "로그인 후 이용 가능합니다.",
         });
         return;
     } try {
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
         });
     } catch (err) {
         res.status(401).send({
-            errorMessage: "22로그인 후 이용 가능한 기능입니다.",
+            errorMessage: "사용자 인증에 실패했습니다.",
         });
     }
 };
