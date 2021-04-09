@@ -1,9 +1,11 @@
 # instagram clone coding
 - clone coding with node.js, express server.
 - youtube: 
-  
-<iframe width="640" height="360" src="https://www.youtube.com/watch?v=MlNSApJvKfc" frameborder="0" gesture="media" allowfullscreen=""></iframe>
-  
+---
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=MlNSApJvKfc
+" target="_blank"><img src="http://img.youtube.com/vi/MlNSApJvKfc/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>---
+
 ## contributor
 - 강태진
 - 김연재
