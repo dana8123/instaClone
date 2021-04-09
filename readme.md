@@ -4,7 +4,7 @@
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=MlNSApJvKfc
 " target="_blank"><img src="http://img.youtube.com/vi/MlNSApJvKfc/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>---
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 ## contributor
 - 강태진
